@@ -33,6 +33,7 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
     private TextView contentText;
     private TextView dateText;
     private View deleteBtn;
+    private View priColor;
 
     public NoteViewHolder(@NonNull View itemView, NoteOperator operator) {
         super(itemView);
@@ -42,11 +43,17 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
         contentText = itemView.findViewById(R.id.text_content);
         dateText = itemView.findViewById(R.id.text_date);
         deleteBtn = itemView.findViewById(R.id.btn_delete);
+        priColor = itemView.findViewById(R.id.item_bg);
     }
 
     public void bind(final Note note) {
         contentText.setText(note.getContent());
         dateText.setText(SIMPLE_DATE_FORMAT.format(note.getDate()));
+
+        //set background-color
+        if(note.getPriority()==3) priColor.setBackgroundColor(0xFFFFFF00);
+        else if(note.getPriority()==2) priColor.setBackgroundColor(0xFF00FF00);
+        else priColor.setBackgroundColor(0xFF80FFFF);
 
         checkBox.setOnCheckedChangeListener(null);
         checkBox.setChecked(note.getState() == State.DONE);
