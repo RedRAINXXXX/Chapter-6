@@ -14,8 +14,13 @@ import android.widget.Toast;
 
 import com.byted.camp.todolist.R;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -65,7 +70,45 @@ public class DebugActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO 把一段文本写入某个存储区的文件中，再读出来，显示在 fileText 上
-                fileText.setText("TODO");
+                String writeIn = "Hello World!";
+                String readOut = "";
+                String fileName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "testRW.txt";
+                File txt = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),"testRW.txt");
+                FileOutputStream out = null;
+                BufferedReader br = null;
+                try {
+                    out = new FileOutputStream(txt);
+                    out.write(writeIn.getBytes());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        out.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                try {
+                    File file = new File(fileName);
+                    br = new BufferedReader(new FileReader(file));
+                    String readline = "";
+                    StringBuffer sb = new StringBuffer();
+                    while ((readline = br.readLine()) != null) {
+                        sb.append(readline);
+                    }
+                    readOut = sb.toString();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }finally {
+                    try {
+                        br.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                fileText.setText(readOut);
             }
         });
     }
